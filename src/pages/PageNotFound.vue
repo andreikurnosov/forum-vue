@@ -6,7 +6,6 @@
         go home instead?
       </router-link>
 
-
       </p>
   </div>
 </template>

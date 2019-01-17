@@ -7,17 +7,14 @@
       :key="thread['.key']"
     />
   </div>
-
 </template>
 
 <script>
 import ThreadListItem from './ThreadListItem'
-
 export default {
   components: {
     ThreadListItem
   },
-
   props: {
     threads: {
       required: true,
@@ -26,4 +23,3 @@ export default {
   }
 }
 </script>
-

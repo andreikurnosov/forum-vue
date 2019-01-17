@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import sourceData from '@/data.json'
+import sourceData from '@/data'
 import ThreadList from '@/components/ThreadList'
 
 console.log(sourceData)
@@ -18,8 +18,8 @@ export default {
   data () {
     return {
       threads: Object.values(sourceData.threads),
-      posts: Object.values(sourceData.posts),
-      users: Object.values(sourceData.users)
+      posts: sourceData.posts,
+      users: sourceData.users
     }
   }
 }
