@@ -8,8 +8,6 @@
   </div>
 </template>
 
-
-
 <script>
 import CategoryListItem from './CategoryListItem'
 

@@ -8,8 +8,6 @@
 </div>
 
 </template>
-
-
 <script>
 import ForumListItem from './ForumListItem'
 export default {

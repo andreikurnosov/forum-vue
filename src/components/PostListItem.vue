@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import sourceData from '@/data'
+
 export default {
   props: {
     post: {
@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     user () {
-      return sourceData.users[this.post.userId]
+      return this.$store.state.users[this.post.userId]
     },
     userPostCount () {
       return Object.keys(this.user.posts).length
