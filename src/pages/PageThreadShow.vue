@@ -13,7 +13,7 @@
       </h1>
 
       <p>
-        By <a href="#" class="link-unstyled">Robin</a>, <AppDate :timestamp="thread.publishedAt"/>.
+        By <a href="#" class="link-unstyled">Robin</a>, <AppDate :timestamp="thread.publishedAt"/>
         <span style="float:right; margin-top: 2px;" class="hide-mobile text-faded text-small">3 replies from 3 contributors</span>
       </p>
       <PostList :posts="posts"/>
@@ -23,12 +23,10 @@
     </div>
 
 </template>
-
 <script>
 
 import PostList from '@/components/PostList'
 import PostEditor from '@/components/PostEditor'
-
 export default {
   components: {
     PostList,
