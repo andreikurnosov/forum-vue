@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import {countObjectProperties} from '@/utils'
 import PostEditor from './PostEditor'
 
 export default {
@@ -58,7 +57,7 @@ export default {
       return this.$store.state.users[this.post.userId]
     },
     userPostCount () {
-      return countObjectProperties(this.user.posts)
+      return this.$store.getters.userPostsCount(this.post.userId)
     }
   }
 }
