@@ -1,30 +1,34 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import sourceData from '@/data'
 import {countObjectProperties} from '@/utils'
 
 Vue.use(Vuex)
 
 const makeAppendChildToParentMutation = ({ parent, child }) =>
-(state, { childId, parentId }) => {
-  const resource = state[parent][parentId]
-
-  if (!resource[child]) {
-    Vue.set(resource, child, {})
+  (state, { childId, parentId }) => {
+    const resource = state[parent][parentId]
+    if (!resource[child]) {
+      Vue.set(resource, child, {})
+    }
+    Vue.set(resource[child], childId, childId)
   }
-
-  Vue.set(resource[child], childId, childId)
-}
 
 export default new Vuex.Store({
   state: {
-    ...sourceData,
+    categories: {},
+    forums: {},
+    threads: {},
+    posts: {},
+    users: {},
     authId: '7uVPJS9GHoftN58Z2MXCYDqmNAh2'
   },
+
   getters: {
     authUser (state) {
-      return state.users[state.authId]
+      // return state.users[state.authId]
+      return {}
     },
+
     userPostsCount: state => id => countObjectProperties(state.users[id].posts),
 
     userThreadsCount: state => id => countObjectProperties(state.users[id].threads),
@@ -32,6 +36,7 @@ export default new Vuex.Store({
     threadRepliesCount: state => id => countObjectProperties(state.threads[id].posts) - 1
 
   },
+
   actions: {
     createPost ({commit, state}, post) {
       const postId = 'greatPost' + Math.random()
