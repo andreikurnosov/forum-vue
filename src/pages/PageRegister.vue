@@ -5,28 +5,28 @@
         <h1 class="text-center">Register</h1>
 
         <div class="form-group">
-          <label v-model="form.name" for="name">Full Name</label>
-          <input id="name" type="text" class="form-input">
+          <label for="name">Full Name</label>
+          <input v-model="form.name" id="name" type="text" class="form-input">
         </div>
 
         <div class="form-group">
-          <label v-model="form.username" for="username">Username</label>
-          <input id="username" type="text" class="form-input">
+          <label for="username">Username</label>
+          <input v-model="form.username" id="username" type="text" class="form-input">
         </div>
 
         <div class="form-group">
-          <label v-model="form.email" for="email">Email</label>
-          <input id="email" type="email" class="form-input">
+          <label for="email">Email</label>
+          <input v-model="form.email" id="email" type="email" class="form-input">
         </div>
 
         <div class="form-group">
-          <label v-model="form.password" for="password">Password</label>
-          <input id="password" type="password" class="form-input">
+          <label for="password">Password</label>
+          <input v-model="form.password" id="password" type="password" class="form-input">
         </div>
 
         <div class="form-group">
-          <label v-model="form.avatar" for="avatar">Avatar</label>
-          <input id="avatar" type="text" class="form-input">
+          <label for="avatar">Avatar</label>
+          <input v-model="form.avatar" id="avatar" type="text" class="form-input">
         </div>
 
         <div class="form-actions">
@@ -58,7 +58,9 @@ export default {
 
   methods: {
     register () {
-      console.log(this.form)
+      console.log(this.form.username)
+      this.$store.dispatch('createUser', this.form)
+        .then(() => this.$router.push('/'))
     }
   },
 
