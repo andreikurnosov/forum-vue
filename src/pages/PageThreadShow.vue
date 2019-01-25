@@ -70,6 +70,13 @@ export default {
         // fetch user
         this.$store.dispatch('fetchUser', {id: thread.userId})
 
+        this.$store.dispatch('fetchPosts', {ids: Object.keys(thread.posts)})
+          .then(posts => {
+            posts.forEach(post => {
+              this.$store.dispatch('fetchUser', {id: post.userId})
+            })
+          })
+
         Object.keys(thread.posts).forEach(postId => {
           // fetch posts
           this.$store.dispatch('fetchPost', {id: postId})
