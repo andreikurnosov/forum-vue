@@ -10,6 +10,7 @@ export default {
     post.publishedAt = Math.floor(Date.now() / 1000)
 
     const updates = {}
+
     updates[`posts/${postId}`] = post
 
     updates[`threads/${post.threadId}/posts/${postId}`] = postId
