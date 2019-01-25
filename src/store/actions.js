@@ -1,22 +1,29 @@
 import firebase from 'firebase'
 
 export default {
-  createPost ({commit, state}, post) {
-    const postId = 'greatPost' + Math.random()
 
-    post['.key'] = postId
+  createPost ({commit, state}, post) {
+    const postId = firebase.database().ref('posts').push().key
 
     post.userId = state.authId
 
     post.publishedAt = Math.floor(Date.now() / 1000)
 
-    commit('setPost', {post, postId})
+    const updates = {}
+    updates[`posts/${postId}`] = post
+    updates[`threads/${post.threadId}/posts/${postId}`] = postId
+    updates[`users/${post.userId}/posts/${postId}`] = postId
 
-    commit('appendPostToThread', {parentId: post.threadId, childId: postId})
+    firebase.database().ref().update(updates)
+      .then(() => {
+        commit('setItem', {resource: 'posts', item: post, id: postId})
 
-    commit('appendPostToUser', {parentId: post.userId, childId: postId})
+        commit('appendPostToThread', {parentId: post.threadId, childId: postId})
 
-    return Promise.resolve(state.posts[postId])
+        commit('appendPostToUser', {parentId: post.userId, childId: postId})
+
+        return Promise.resolve(state.posts[postId])
+      })
   },
 
   updateThread ({state, commit, dispatch}, {title, text, id}) {
