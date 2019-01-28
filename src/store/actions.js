@@ -139,10 +139,20 @@ export default {
 
   fetchAuthUser ({dispatch, commit}) {
     const userId = firebase.auth().currentUser.uid
-    return dispatch('fetchUser', {id: userId})
-      .then(() => {
-        commit('setAuth', userId)
+
+    return new Promise((resolve, reject) => {
+      firebase.database().ref('users').child(userId).once('value', snapshot => {
+        if (snapshot.exists()) {
+          return dispatch('fetchUser', {id: userId})
+            .then(user => {
+              commit('setAuth', userId)
+              resolve(user)
+            })
+        } else {
+          resolve(null)
+        }
       })
+    })
   },
 
   fetchCategory: ({dispatch}, {id}) => dispatch('fetchItem', {resource: 'categories', id, emoji: 'category'}),
@@ -200,10 +210,25 @@ export default {
         // something strange, if do it user => user.uid - it doesnt's work
         return dispatch('createUser', {id: firebase.auth().currentUser.uid, email, name, username, password, avatar})
       })
+        .then(() => dispatch('fetchAuthUser'))
   },
 
   signInWithEmailAndPassword (context, {email, password}) {
     return firebase.auth().signInWithEmailAndPassword(email, password)
+  },
+
+  signInWithGoogle ({dispatch}) {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    return firebase.auth().signInWithPopup(provider)
+      .then(data => {
+        const user = data.user
+        firebase.database().ref('users').child(user.uid).once('value', snapshot => {
+          if (!snapshot.exists()) {
+            return dispatch('createUser', {id: user.uid, name: user.displayName, email: user.email, username: user.email, avatar: user.photoURL})
+              .then(() => dispatch('fetchAuthUser'))
+          }
+        })
+      })
   },
 
   signOut ({commit}) {
