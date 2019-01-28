@@ -202,6 +202,17 @@ export default {
       })
   },
 
+  signInWithEmailAndPassword (context, {email, password}) {
+    return firebase.auth().signInWithEmailAndPassword(email, password)
+  },
+
+  signOut ({commit}) {
+    return firebase.auth().signOut()
+      .then(() => {
+        commit('setAuth', null)
+      })
+  },
+
   createUser ({state, commit}, {id, email, name, username, avatar = null}) {
     return new Promise((resolve, reject) => {
       const registeredAt = Math.floor(Date.now() / 1000)
