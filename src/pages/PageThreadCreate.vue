@@ -21,6 +21,7 @@ import ThreadEditor from '@/components/ThreadEditor'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
+  // TODO: only auth users can create threads, add redirects to signin & registers pages
   components: {
     ThreadEditor
   },
