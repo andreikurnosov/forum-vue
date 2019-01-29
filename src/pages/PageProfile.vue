@@ -23,10 +23,11 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
 import PostList from '@/components/PostList'
 import UserProfileCard from '@/components/UserProfileCard'
 import UserProfileCardEditor from '@/components/UserProfileCardEditor'
+import {mapGetters} from 'vuex'
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
   components: {
@@ -40,6 +41,9 @@ export default {
       default: false
     }
   },
+
+  mixins: [asyncDataStatus],
+
   computed: {
     ...mapGetters({
       user: 'authUser'
@@ -51,6 +55,10 @@ export default {
       }
       return []
     }
+  },
+  created () {
+    this.$store.dispatch('fetchPosts', {ids: this.user.posts})
+      .then(() => this.asyncDataStatus_fetched())
   }
 }
 </script>
