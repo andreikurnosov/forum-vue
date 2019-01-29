@@ -6,6 +6,7 @@
     </h1>
 
     <ThreadEditor
+      ref="editor"
       @save="save"
       @cancel="cancel"
     />
@@ -32,9 +33,17 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      saved: false
+    }
+  },
   computed: {
     forum () {
       return this.$store.state.forums[this.forumId]
+    },
+    hasUnsavedChanges () {
+      return (this.$refs.editor.form.title || this.$refs.editor.form.text) && !this.saved
     }
   },
   methods: {
@@ -45,6 +54,7 @@ export default {
         title,
         text
       }).then(thread => {
+        this.saved = true
         this.$router.push({name: 'ThreadShow', params: {id: thread['.key']}})
       })
     },
@@ -55,7 +65,18 @@ export default {
   created () {
     this.fetchForum({id: this.forumId})
       .then(() => { this.asyncDataStatus_fetched() })
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.hasUnsavedChanges) {
+      const confirmed = window.confirm('Are you sure want to leave? Usaved changes will be lost.')
+      if (confirmed) {
+        next()
+      } else {
+        next(false)
+      }
+    } else {
+      next()
+    }
   }
-
 }
 </script>

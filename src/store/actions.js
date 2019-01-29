@@ -139,7 +139,6 @@ export default {
 
   fetchAuthUser ({dispatch, commit}) {
     const userId = firebase.auth().currentUser.uid
-
     return new Promise((resolve, reject) => {
       firebase.database().ref('users').child(userId).once('value', snapshot => {
         if (snapshot.exists()) {
