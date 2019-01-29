@@ -7,11 +7,16 @@
         <p class="text-lead">{{ forum.description }}</p>
       </div>
       <router-link
+        v-if="authUser"
         :to="{name: 'ThreadCreate', params: {forumId: this.forum['.key']}}"
         class="btn-green btn-small"
       >
         Start a thread
       </router-link>
+      <div v-else class="text-center" style="margin-bottom: 50px;">
+        <router-link :to="{name: 'SignIn', query: {redirectTo: $route.path}}">Sign in</router-link> or
+        <router-link :to="{name: 'Register', query: {redirectTo: $route.path}}">Register</router-link> to create a thread.
+      </div>
     </div>
   </div>
   <div class="col-full push-top">
@@ -23,7 +28,7 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import ThreadList from '@/components/ThreadList'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 
@@ -41,6 +46,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      authUser: 'authUser'
+    }),
     forum () {
       return this.$store.state.forums[this.id]
     },
