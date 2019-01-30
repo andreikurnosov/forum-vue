@@ -62,13 +62,15 @@
         <div class="form-group">
           <label for="avatar">Avatar</label>
           <input
-          v-model="form.avatar"
+          v-model.lazy="form.avatar"
           @blur="$v.form.avatar.$touch()"
           id="avatar"
           type="text"
           class="form-input">
           <template v-if="$v.form.avatar.$error">
-            <span v-if="!$v.form.avatar.required" class="form-error">This field is required</span>
+            <span v-if="!$v.form.avatar.url" class="form-error">The supplied URL is invalid</span>
+            <span v-else-if="!$v.form.avatar.supportedImageFile" class="form-error">This file type is not supported by our system. <br> Supported file types: .jpg, .png, .jpeg, .svg</span>
+            <span v-else-if="!$v.form.avatar.responseOk" class="form-error">The supplied image cannot be found</span>
           </template>
         </div>
 
@@ -87,7 +89,7 @@
 
 <script>
 import firebase from 'firebase'
-import {required, email, minLength, helpers as vuelidateHelpers} from 'vuelidate/lib/validators'
+import {required, email, minLength, helpers as vuelidateHelpers, url} from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
@@ -140,7 +142,25 @@ export default {
       },
 
       avatar: {
-        required
+        url,
+        supportedImageFile (value) {
+          if (!vuelidateHelpers.req(value)) {
+            return true
+          }
+          const supported = ['jpg', 'jpeg', 'gif', 'png', 'svg']
+          const suffix = value.split('.').pop()
+          return supported.includes(suffix)
+        },
+        responseOk (value) {
+          if (!vuelidateHelpers.req(value)) {
+            return true
+          }
+          return new Promise((resolve, reject) => {
+            fetch(value)
+              .then(response => resolve(response.ok))
+              .catch(() => resolve(false))
+          })
+        }
       }
     }
 
