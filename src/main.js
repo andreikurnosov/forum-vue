@@ -5,8 +5,11 @@ import App from './App'
 import router from './router'
 import store from '@/store/index'
 import firebase from 'firebase'
+import vuelidate from 'vuelidate'
 
 import AppDate from '@/components/AppDate'
+
+Vue.use(vuelidate)
 
 Vue.component('AppDate', AppDate)
 
